@@ -1,27 +1,41 @@
-function testStreamedMessage(index: number) {
-  const tokenList = ["the", "quick", "brown", "fox"];
+import { runTestServer } from '../../support/testUtils';
+
+const tokenList = ['the', 'quick', 'brown', 'fox'];
+
+function messageStream(index: number) {
   for (const token of tokenList) {
-    cy.get(".message").eq(index).should("contain", token);
+    cy.get('.step').eq(index).should('contain', token);
   }
-  cy.get(".message").eq(index).should("contain", tokenList.join(" "));
+  cy.get('.step').eq(index).should('contain', tokenList.join(' '));
 }
 
-describe("Streaming", () => {
+function toolStream(tool: string) {
+  const toolCall = cy.get(`#step-${tool}`);
+  toolCall.click();
+  for (const token of tokenList) {
+    toolCall.parent().should('contain', token);
+  }
+  toolCall.parent().should('contain', tokenList.join(' '));
+}
+
+describe('Streaming', () => {
   before(() => {
-    cy.intercept("/project/settings").as("settings");
-    cy.visit("http://127.0.0.1:8000");
-    cy.wait(["@settings"]);
+    runTestServer();
   });
 
-  it("should be able to stream a message", () => {
-    cy.get(".message").should("have.length", 1);
+  it('should be able to stream a message', () => {
+    cy.get('.step').should('have.length', 1);
 
-    testStreamedMessage(0);
+    messageStream(0);
 
-    cy.get(".message").should("have.length", 1);
+    cy.get('.step').should('have.length', 1);
 
-    testStreamedMessage(1);
+    messageStream(1);
 
-    cy.get(".message").should("have.length", 2);
+    cy.get('.step').should('have.length', 2);
+
+    toolStream('tool1');
+
+    cy.get('.step').should('have.length', 3);
   });
 });
