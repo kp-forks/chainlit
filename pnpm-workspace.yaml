@@ -1,2 +1,5 @@
 packages:
-  - "src/chainlit/frontend/"
+  - frontend/
+  - libs/react-components/
+  - libs/react-client/
+  - libs/copilot/

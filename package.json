@@ -1,24 +1,38 @@
 {
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.59.5",
-    "cypress": "^12.9.0",
-    "dotenv": "^16.0.3",
-    "eslint": "^8.40.0",
-    "husky": "^8.0.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^8.15.0",
+    "@typescript-eslint/parser": "^8.15.0",
+    "cypress": "12.9.0",
+    "dotenv": "^16.3.1",
+    "eslint": "^8.57.1",
+    "husky": "^9.1.6",
+    "kill-port": "^2.0.1",
+    "lint-staged": "^13.3.0",
     "prettier": "^2.8.8",
-    "tree-kill": "^1.2.2",
+    "shell-exec": "^1.1.2",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.4"
+    "typescript": "^5.2.2"
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "test": "pnpm exec ts-node ./cypress/support/e2e.ts && (cd src/chainlit/frontend && pnpm run test)",
-    "prepare": "husky install",
-    "lintUi": "cd src/chainlit/frontend && pnpm run lint",
-    "formatUi": "cd src/chainlit/frontend && pnpm run format",
-    "lintPython": "cd src/ && poetry run mypy chainlit/",
+    "test": "pnpm exec ts-node ./cypress/support/e2e.ts",
+    "test:ui": "cd frontend && pnpm test",
+    "prepare": "husky",
+    "lint": "pnpm run lintUi && pnpm run lintPython",
+    "lintUi": "pnpm run --parallel lint",
+    "formatUi": "pnpm run --parallel format",
+    "lintPython": "cd backend && poetry run dmypy run --timeout 600 -- chainlit/ tests/",
     "formatPython": "black `git ls-files | grep '.py$'` && isort --profile=black .",
-    "buildUi": "(cd src/chainlit/frontend && pnpm run build)",
-    "build": "(cd src/chainlit/frontend && pnpm run build) && (cd src && poetry build)"
+    "buildUi": "cd libs/react-client && pnpm run build && cd ../copilot && pnpm run build && cd ../../frontend && pnpm run build"
+  },
+  "pnpm": {
+    "overrides": {
+      "@cypress/request@<=2.88.12": ">=3.0.0",
+      "braces@<3.0.3": ">=3.0.3",
+      "micromatch@<4.0.8": ">=4.0.8"
+    }
   }
 }

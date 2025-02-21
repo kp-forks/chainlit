@@ -1,14 +1,14 @@
-describe("Error Handling", () => {
+import { runTestServer } from '../../support/testUtils';
+
+describe('Error Handling', () => {
   before(() => {
-    cy.intercept("/project/settings").as("settings");
-    cy.visit("http://127.0.0.1:8000");
-    cy.wait(["@settings"]);
+    runTestServer();
   });
 
-  it("should correctly display errors", () => {
-    cy.get(".message")
-      .should("have.length", 1)
+  it('should correctly display errors', () => {
+    cy.get('.step')
+      .should('have.length', 1)
       .eq(0)
-      .should("contain", "This is an error message");
+      .should('contain', 'This is an error message');
   });
 });
