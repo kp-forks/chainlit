@@ -5,12 +5,14 @@ dist
 
 .env
 
-poetry.lock
+*.files
 
 venv
-
+.venv
 .DS_Store
 
+.chainlit
+!cypress/e2e/**/*/.chainlit/*
 chainlit.md
 
 cypress/screenshots
@@ -23,6 +25,7 @@ __pycache__
 
 *.db
 
+.mypy_cache
 
 chat_files
 
@@ -52,3 +55,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+.aider*
+.coverage
+
+backend/README.md
+backend/.dmypy.json
